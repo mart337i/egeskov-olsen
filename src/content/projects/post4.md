@@ -1,6 +1,6 @@
 ---
 title: "Use of reflection for FastApi"
-description: "Identify routes automaticly and import them on startup"
+description: "Identify API routes automatically and import them on startup"
 pubDate: "Jun 3 2024"
 heroImage: "https://upload.wikimedia.org/wikipedia/commons/c/c2/GitHub_Invertocat_Logo.svg"
 tags: []
