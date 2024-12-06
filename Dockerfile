@@ -7,7 +7,7 @@
 # Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
 
 ARG NODE_VERSION=18.19.1
-ARG PNPM_VERSION=9.15.0
+ARG PNPM_VERSION=9.14.4
 
 ################################################################################
 # Use node image for base image for all stages.
@@ -58,7 +58,7 @@ FROM base as final
 ENV NODE_ENV production
 
 # Run the application as a non-root user.
-USER node
+# USER node # This will raise an error: EACCES: permission denied, open '/usr/src/app/
 
 # Copy package.json so that package manager commands can be used.
 COPY package.json .
