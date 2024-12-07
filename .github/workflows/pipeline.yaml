@@ -62,7 +62,7 @@ jobs:
       - name: Docker Stack Deploy
         uses: cssnr/stack-deploy-action@v1
         with:
-          name: egeskov-group.dk
+          name: egeskov-group
           file: docker-stack.yaml
           host: egeskov-group.dk
           user: deployment
