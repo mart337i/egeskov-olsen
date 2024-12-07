@@ -9,7 +9,7 @@
 # https://github.com/docker/awesome-compose
 services:
   server:
-    image: ghcr.io/mart337i/egeskov-olsen.dk:${GIT_COMMIT_HASH}
+    image: ghcr.io/mart337i/egeskov-olsen.dk:latest
     environment:
       NODE_ENV: production
     ports:
