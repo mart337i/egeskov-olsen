@@ -73,4 +73,4 @@ COPY --from=build /usr/src/app/. ./.
 EXPOSE 4321
 
 # Run the application.
-CMD pnpm start
+CMD pnpm start --host
