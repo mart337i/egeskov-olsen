@@ -67,4 +67,5 @@ jobs:
           host: egeskov-group.dk
           user: deployment
           ssh_key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+          token: ${{ secrets.PORTAINER_TOKEN }}
           env_file: ./envfile
