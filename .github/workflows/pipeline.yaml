@@ -55,11 +55,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create env file
+      - name: Login to GHCR on remote host
         run: |
-          echo "GIT_COMMIT_HASH=${{ github.sha }}" > ./envfile
+          ssh -i ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }} deployment@egeskov-group.dk \
+            "echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin"
 
-      - name: Docker Stack Deploy
+      - name: Create env file
+        run: echo "GIT_COMMIT_HASH=${{ github.sha }}" > ./envfile
+
+      - name: Deploy stack
         uses: cssnr/stack-deploy-action@v1
         with:
           name: egeskov-group
