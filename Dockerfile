@@ -59,6 +59,18 @@ ENV NODE_ENV production
 
 # Run the application as a non-root user.
 # USER node # This will raise an error: EACCES: permission denied, open '/usr/src/app/
+ARG UID=10001
+RUN adduser \
+    --disabled-password \
+    --gecos "" \
+    --home "/nonexistent" \
+    --shell "/sbin/nologin" \
+    --no-create-home \
+    --uid "${UID}" \
+    appuser
+USER appuser
+
+
 
 # Copy package.json so that package manager commands can be used.
 COPY package.json .
