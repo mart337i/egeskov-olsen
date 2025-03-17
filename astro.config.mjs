@@ -6,5 +6,8 @@ import tailwind from "@astrojs/tailwind";
 // https://astro.build/config
 export default defineConfig({
   site: 'https://egeskov-olsen.dk',
-  integrations: [mdx(), sitemap(), tailwind()]
+  integrations: [mdx(), sitemap(), tailwind()], // <-- Missing comma added
+  devToolbar: {
+    enabled: false
+  }
 });
