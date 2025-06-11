@@ -62,9 +62,9 @@ jobs:
       - name: Docker Stack Deploy
         uses: cssnr/stack-deploy-action@v1
         with:
-          name: egeskov-group
+          name: egeskov-olsen
           file: docker-stack.yaml
-          host: egeskov-group.dk
+          host: egeskov-olsen.dk
           user: deploy
           ssh_key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
           env_file: ./envfile
