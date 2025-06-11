@@ -1,13 +1,8 @@
 import { defineConfig } from 'astro/config';
+import tailwind from '@astrojs/tailwind';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
-import tailwind from "@astrojs/tailwind";
 
-// https://astro.build/config
 export default defineConfig({
-  site: 'https://egeskov-olsen.dk',
-  integrations: [mdx(), sitemap(), tailwind()], // <-- Missing comma added
-  devToolbar: {
-    enabled: false
-  }
+  integrations: [tailwind(), mdx(), sitemap()],
 });
