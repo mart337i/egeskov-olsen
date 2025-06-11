@@ -60,7 +60,7 @@ jobs:
       - name: Docker Stack Deploy
         uses: cssnr/stack-deploy-action@v1
         with:
-          name: egeskov-olsen.dk
+          name: egeskov-olsen
           file: docker-stack.yaml
           host: egeskov-olsen.dk
           user: deploy
