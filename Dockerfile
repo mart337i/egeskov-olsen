@@ -81,7 +81,7 @@ COPY --from=build /usr/src/app/dist ./dist
 COPY --from=build /usr/src/app/package.json ./package.json
 
 # Expose the port that the application listens on.
-EXPOSE 4321
+EXPOSE 4421
 
 # Run the application.
 CMD pnpm start --host
