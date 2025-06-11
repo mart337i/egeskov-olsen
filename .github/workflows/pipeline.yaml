@@ -53,7 +53,7 @@ jobs:
       - build-and-push-image
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Create env file
         run: |
@@ -68,3 +68,7 @@ jobs:
           user: deploy
           ssh_key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
           env_file: ./envfile
+          registry_auth: true
+          registry_host: ghcr.io
+          registry_user: mart337i
+          registry_pass: ${{ secrets.GITHUB_TOKEN }}
