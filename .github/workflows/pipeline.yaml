@@ -19,8 +19,6 @@ jobs:
 
       - name: Run tests
         run: |
-          echo "Add your test script here"
-          # Example: npm install && npm test
           exit 0
 
   build-and-push-image:
@@ -62,7 +60,7 @@ jobs:
       - name: Docker Stack Deploy
         uses: cssnr/stack-deploy-action@v1
         with:
-          name: egeskov-olsen
+          name: egeskov-olsen.dk
           file: docker-stack.yaml
           host: egeskov-olsen.dk
           user: deploy
