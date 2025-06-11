@@ -25,29 +25,26 @@ RUN --mount=type=cache,target=/root/.npm \
 # Create a stage for installing production dependencies.
 FROM base as deps
 
-# Copy package files
-COPY package.json pnpm-lock.yaml ./
+# Copy package files and pnpm config
+COPY package.json pnpm-lock.yaml .npmrc ./
 
 # Install production dependencies
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
     pnpm install --prod --frozen-lockfile
 
-# Force Sharp to rebuild for the current platform
-RUN pnpm rebuild sharp
-
 ################################################################################
 # Create a stage for building the application.
 FROM base as build
 
-# Copy package files
-COPY package.json pnpm-lock.yaml ./
+# Copy package files and pnpm config
+COPY package.json pnpm-lock.yaml .npmrc ./
 
 # Install all dependencies including dev dependencies
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
     pnpm install --frozen-lockfile
 
-# Force Sharp to rebuild for the current platform
-RUN pnpm rebuild sharp
+# Explicitly install and rebuild Sharp for pnpm compatibility
+RUN pnpm add sharp && pnpm rebuild sharp
 
 # Copy the rest of the source files into the image.
 COPY . .
