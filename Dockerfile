@@ -25,28 +25,29 @@ RUN --mount=type=cache,target=/root/.npm \
 # Create a stage for installing production dependencies.
 FROM base as deps
 
-# Download dependencies as a separate step to take advantage of Docker's caching.
-# Leverage a cache mount to /root/.local/share/pnpm/store to speed up subsequent builds.
-# Leverage bind mounts to package.json and pnpm-lock.yaml to avoid having to copy them
-# into this layer.
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
-    --mount=type=cache,target=/root/.local/share/pnpm/store \
+# Copy package files
+COPY package.json pnpm-lock.yaml ./
+
+# Install production dependencies
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
     pnpm install --prod --frozen-lockfile
+
+# Force Sharp to rebuild for the current platform
+RUN pnpm rebuild sharp
 
 ################################################################################
 # Create a stage for building the application.
-FROM deps as build
+FROM base as build
 
-# Copy package files first
+# Copy package files
 COPY package.json pnpm-lock.yaml ./
 
 # Install all dependencies including dev dependencies
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
     pnpm install --frozen-lockfile
 
-# Explicitly install Sharp to fix pnpm strict package manager issue
-RUN pnpm add sharp
+# Force Sharp to rebuild for the current platform
+RUN pnpm rebuild sharp
 
 # Copy the rest of the source files into the image.
 COPY . .
@@ -56,7 +57,6 @@ RUN pnpm run build
 
 ################################################################################
 # Create a new stage to run the application with minimal runtime dependencies
-# where the necessary files are copied from the build stage.
 FROM base as final
 
 # Use production node environment by default.
