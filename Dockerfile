@@ -4,15 +4,15 @@ ARG PNPM_VERSION=9.14.4
 
 ################################################################################
 # Use node image for base image for all stages.
-FROM node:${NODE_VERSION}-alpine as base
+FROM node:${NODE_VERSION}-slim as base
 
-# Install Sharp dependencies for Alpine Linux
-RUN apk add --no-cache \
-    libc6-compat \
-    vips-dev \
+# Install Sharp dependencies for Debian
+RUN apt-get update && apt-get install -y \
+    libvips-dev \
     python3 \
     make \
-    g++
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set working directory for all build stages.
 WORKDIR /usr/src/app
@@ -81,7 +81,7 @@ COPY --from=build /usr/src/app/dist ./dist
 COPY --from=build /usr/src/app/package.json ./package.json
 
 # Expose the port that the application listens on.
-EXPOSE 4421
+EXPOSE 4321
 
 # Run the application.
 CMD pnpm start --host
