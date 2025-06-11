@@ -1,17 +1,18 @@
 # syntax=docker/dockerfile:1
-
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Dockerfile reference guide at
-# https://docs.docker.com/go/dockerfile-reference/
-
-# Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
-
 ARG NODE_VERSION=18.19.1
 ARG PNPM_VERSION=9.14.4
 
 ################################################################################
 # Use node image for base image for all stages.
 FROM node:${NODE_VERSION}-alpine as base
+
+# Install Sharp dependencies for Alpine Linux
+RUN apk add --no-cache \
+    libc6-compat \
+    vips-dev \
+    python3 \
+    make \
+    g++
 
 # Set working directory for all build stages.
 WORKDIR /usr/src/app
@@ -21,7 +22,7 @@ RUN --mount=type=cache,target=/root/.npm \
     npm install -g pnpm@${PNPM_VERSION}
 
 ################################################################################
-# Create a stage for installing production dependecies.
+# Create a stage for installing production dependencies.
 FROM base as deps
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
@@ -46,6 +47,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 
 # Copy the rest of the source files into the image.
 COPY . .
+
 # Run the build script.
 RUN pnpm run build
 
@@ -58,7 +60,6 @@ FROM base as final
 ENV NODE_ENV production
 
 # Run the application as a non-root user.
-# USER node # This will raise an error: EACCES: permission denied, open '/usr/src/app/
 ARG UID=10001
 RUN adduser \
     --disabled-password \
@@ -70,19 +71,17 @@ RUN adduser \
     appuser
 USER appuser
 
-
-
 # Copy package.json so that package manager commands can be used.
 COPY package.json .
 
 # Copy the production dependencies from the deps stage and also
 # the built application from the build stage into the image.
 COPY --from=deps /usr/src/app/node_modules ./node_modules
-COPY --from=build /usr/src/app/. ./.
-
+COPY --from=build /usr/src/app/dist ./dist
+COPY --from=build /usr/src/app/package.json ./package.json
 
 # Expose the port that the application listens on.
-EXPOSE 4321
+EXPOSE 4421
 
 # Run the application.
 CMD pnpm start --host
