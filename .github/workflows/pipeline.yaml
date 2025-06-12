@@ -42,8 +42,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/mart337i/egeskov-olsen.dk:latest
-            ghcr.io/mart337i/egeskov-olsen.dk:${{ github.sha }}
+            ghcr.io/mart337i/egeskov-olsen:latest
+            ghcr.io/mart337i/egeskov-olsen:${{ github.sha }}
 
   deploy:
     runs-on: ubuntu-latest
