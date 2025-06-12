@@ -1,4 +1,4 @@
-FROM node:18-alpine AS build
+FROM node:18-alpine
 
 RUN npm install -g pnpm
 
@@ -10,11 +10,6 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 RUN pnpm run build
 
-# Production stage
-FROM nginx:alpine
-
-COPY --from=build /app/dist /usr/share/nginx/html
-
-RUN sed -i 's/listen       80;/listen       8888;/g' /etc/nginx/conf.d/default.conf
-
 EXPOSE 8888
+
+CMD ["pnpm", "run", "preview", "--host", "0.0.0.0", "--port", "8888"]
